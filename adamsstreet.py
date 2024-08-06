@@ -11,7 +11,6 @@ from Generate_Header_Dictionary import get_column_headers
 from scrape import search_webpage
 import time
 from concurrent.futures import ThreadPoolExecutor, as_completed
-import pandas
 
 
 try:
