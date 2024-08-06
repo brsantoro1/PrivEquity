@@ -4,8 +4,8 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import NoSuchElementException, WebDriverException, TimeoutException
 
-def search_webpage(name):
-    url = "https://www.adamsstreetpartners.com/our-firm/team/" + name
+def search_webpage(name_url):
+    url = "https://www.adamsstreetpartners.com/our-firm/team/" + name_url
     span_xpath = "/html/body/div[7]/div/div/div[1]/span[1]"  # Updated XPath to locate the desired element
 
     try:
@@ -27,7 +27,7 @@ def search_webpage(name):
 
         except (NoSuchElementException, TimeoutException) as e:
             print(f"Error occurred: {e}")
-            return "Error"
+            return "PERSON NOT FOUND"
         finally:
             driver.quit()  # Close the browser in any case
     except WebDriverException as e:
