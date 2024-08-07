@@ -6,7 +6,7 @@ import openpyxl
 import win32com.client as win32
 import traceback
 from Generate_Header_Dictionary import get_column_headers
-from scrape import search_webpage
+from scrape import search_webpage_adamsstreet
 from concurrent.futures import ThreadPoolExecutor, as_completed
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -30,9 +30,8 @@ sheet = wb[sheet_name]
 
 def process_row(row, column_headers):
     name = str(row[column_headers['Name']])
-    name_url = name.lower().replace(' ', '-') + '/'
     #Check for specified conditions
-    output = search_webpage(name_url)
+    output = search_webpage_adamsstreet(name)
     split = output.split(", ")
     title = split[0]
     if len(split) == 2:
@@ -69,14 +68,16 @@ print(results)
 
 # Convert list of dictionaries to dataframe using pandas
 df = pd.DataFrame(results)
+df_sorted = df.sort_values(by='NAME')
+
 
 # Save dataframe as pdf
 rows_per_page = 15
 pdf_path = r'C:\Users\Bay Street - Larry B\Documents\Brielle\Programming\Projects\Private Equity/dataframe.pdf'
 with PdfPages(pdf_path) as pdf:
-    for start_row in range(0, len(df), rows_per_page):
-        end_row = min(start_row + rows_per_page, len(df))
-        df_chunk = df.iloc[start_row:end_row]
+    for start_row in range(0, len(df_sorted), rows_per_page):
+        end_row = min(start_row + rows_per_page, len(df_sorted))
+        df_chunk = df_sorted.iloc[start_row:end_row]
     
         fig, ax = plt.subplots(figsize=(8.5, 2))  # Set size for the PDF page
         ax.axis('tight')
@@ -95,7 +96,7 @@ with PdfPages(pdf_path) as pdf:
         plt.close(fig)
 
 
-# Send EMAILLLLLL
+# Send email
 outlook = win32.Dispatch('outlook.application')
 mail = outlook.CreateItem(0)
 mail.To = 'intern2@baystreetadvisorsllc.com'

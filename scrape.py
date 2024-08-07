@@ -4,13 +4,17 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import NoSuchElementException, WebDriverException, TimeoutException
 
-def search_webpage(name_url):
-    url = "https://www.adamsstreetpartners.com/our-firm/team/" + name_url
+def search_webpage_adamsstreet(name):
+    url = "https://www.adamsstreetpartners.com/our-firm/team/"
+    full_url = url + name.lower().replace(' ', '-') + '/'
     span_xpath = "/html/body/div[7]/div/div/div[1]/span[1]"  # Updated XPath to locate the desired element
+    get_text(full_url, span_xpath)
 
+
+def get_text(name_url, span_xpath):
     try:
         driver = webdriver.Chrome()  # Assuming Webdriver location is added to Path
-        driver.get(url)
+        driver.get(name_url)
 
         try:
             # If there's a search box or a way to filter the results, use it
